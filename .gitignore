@@ -1,0 +1,76 @@
+# ==============================
+#  PYTHON / PROJECT BASICS
+# ==============================
+__pycache__/
+*.py[cod]
+*.pyo
+*.pyd
+*.pdb
+*.egg-info/
+*.egg
+*.log
+
+# Virtual environments
+.venv/
+venv/
+env/
+ENV/
+*.env
+
+# Byte-compiled / cache
+*.pyc
+*.pyo
+__pycache__/
+
+# ==============================
+#  IDE / SYSTEM FILES
+# ==============================
+# PyCharm / IntelliJ
+.idea/
+*.iml
+
+# VSCode
+.vscode/
+
+# ==============================
+#  ANTLR / BUILD OUTPUTS
+# ==============================
+
+*.interp
+*.tokens
+*.class
+*.jar
+*.out
+*.java
+
+# ==============================
+#  BUILD / PACKAGING
+# ==============================
+build/
+dist/
+*.spec
+*.exe
+*.dll
+*.so
+*.obj
+*.a
+*.lib
+*.zip
+
+# ==============================
+#  TEMP / CACHE / MISC
+# ==============================
+*.tmp
+*.swp
+*.bak
+*.cache
+*.dat
+
+# ==============================
+#  TESTS & OUTPUTS
+# ==============================
+/tests/**/output/
+tests/**/*.out
+tests/**/*.log
+output/
+out/
