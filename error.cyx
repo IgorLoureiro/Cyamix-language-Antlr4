@@ -1,0 +1,7 @@
+int x = ;  // Erro: faltando um valor
+
+if (x > 5 { // Erro: faltando ')'
+    printf("erro");
+}
+
+float y = 3.14 // Erro: faltando ';'
