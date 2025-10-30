@@ -3,6 +3,8 @@ from antlr4 import *
 from antlr4.error.ErrorListener import ErrorListener
 from CyamixLexer import CyamixLexer
 from CyamixParser import CyamixParser
+from compiler.utils import write_code_to_c_file
+from compiler.code_generator import CyamixToCVisitor
 
 class MyErrorListener(ErrorListener):
     def __init__(self):
@@ -40,6 +42,18 @@ def main():
             print(error)
     else:
         print("\nParsing concluído com sucesso (sintaxe correta)!")
+
+        visitor = CyamixToCVisitor()
+
+        # Visita a árvore e gera o código C
+        visitor.visit(tree)
+        c_code = visitor.code
+
+
+        file_base_name = sys.argv[1].split('.cyx')[0]
+        write_code_to_c_file(c_code, file_base_name)
+
+        print("\nCódigo C gerado em output.c")
 
 if __name__ == "__main__":
     main()
