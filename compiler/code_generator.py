@@ -4,32 +4,32 @@ class CyamixToCVisitor(CyamixVisitor):
     def __init__(self):
         self.code = ""
 
-    # Exemplo: variável declarada
+    # Example: variable declare
     def visitVarDecl(self, ctx):
-        tipo = ctx.type().getText()
-        nome = ctx.ID().getText()
-        c_tipo = {
+        type = ctx.type().getText()
+        name = ctx.ID().getText()
+        c_type = {
             "int": "int",
             "float": "float",
             "char": "char",
             "boolean": "int"
-        }[tipo]
+        }[type]
 
-        valor = ""
+        value = ""
         if ctx.expr():
-            valor = " = " + self.visit(ctx.expr())
-        linha = f"{c_tipo} {nome}{valor};\n"
-        self.code += linha
-        return linha
+            value = " = " + self.visit(ctx.expr())
+        line = f"{c_type} {name}{value};\n"
+        self.code += line
+        return line
 
-    # Exemplo: atribuição
+    # Example: Assignment
     def visitAssignment(self, ctx):
-        nome = ctx.ID().getText()
-        valor = self.visit(ctx.expr())
-        linha = f"{nome} = {valor};\n"
-        self.code += linha
-        return linha
+        name = ctx.ID().getText()
+        value = self.visit(ctx.expr())
+        line = f"{name} = {value};\n"
+        self.code += line
+        return line
 
-    # Exemplo: expressão inteira
+    # Example: full expression
     def visitIntLiteral(self, ctx):
         return ctx.getText()
