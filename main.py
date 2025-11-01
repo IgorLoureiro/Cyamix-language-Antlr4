@@ -1,45 +1,57 @@
 import sys
-from antlr4 import *
-from antlr4.error.ErrorListener import ErrorListener
+from antlr4 import FileStream, CommonTokenStream
 from CyamixLexer import CyamixLexer
 from CyamixParser import CyamixParser
 
-class MyErrorListener(ErrorListener):
-    def __init__(self):
-        super(MyErrorListener, self).__init__()
-        self.errors = []
+from error_listener import CyamixErrorListener
 
-    def syntaxError(self, recognizer, offendingSymbol, line, column, msg, e):
-        error_msg = f"Erro na Linha {line}:{column} -> {msg}"
-        self.errors.append(error_msg)
-
-    def hasErrors(self):
-        return len(self.errors) > 0
-
-def main():
-    if len(sys.argv) < 2:
-        print("Uso: python main.py <source.cyx>")
-        return
-
-    input_stream = FileStream(sys.argv[1], encoding='utf-8')
+def run_parser(file_path: str) -> list[str]:
+    """
+    This is the dedicated parsing function.
+    It contains the core parsing logic.
+    It takes a file path, runs the parser, and returns a list of errors.
+    """
     
+    try:
+        input_stream = FileStream(file_path, encoding='utf-8')
+    except FileNotFoundError:
+        return [f"Error: File not found at path: {file_path}"]
+    except Exception as e:
+        return [f"Error opening file: {e}"]
+
     lexer = CyamixLexer(input_stream)
     stream = CommonTokenStream(lexer)
     parser = CyamixParser(stream)
 
-    error_listener = MyErrorListener()
-    parser.removeErrorListeners()
+    error_listener = CyamixErrorListener()
+    parser.removeErrorListeners() 
     parser.addErrorListener(error_listener)
 
-    print(f"Iniciando parsing de {sys.argv[1]}...")
     tree = parser.program()
 
-    if error_listener.hasErrors():
-        print("\nParsing falhou! Erros encontrados:")
-        for error in error_listener.errors:
+    return error_listener.errors
+
+def main():
+    """
+    Main entry point for the script.
+    Handles command-line arguments and prints the final result.
+    """
+    if len(sys.argv) < 2:
+        print("Usage: python main.py <source.cyx>")
+        sys.exit(1)
+
+    file_path = sys.argv[1]
+    print(f"Starting parsing of {file_path}...")
+
+    errors = run_parser(file_path)
+
+    if errors:
+        print("\nParsing failed! Errors found:")
+        for error in errors:
             print(error)
+        sys.exit(1)
     else:
-        print("\nParsing concluído com sucesso (sintaxe correta)!")
+        print("\nParsing completed successfully (correct syntax)!")
 
 if __name__ == "__main__":
     main()
