@@ -4,6 +4,8 @@ import os
 from antlr4 import FileStream, CommonTokenStream
 from CyamixLexer import CyamixLexer
 from CyamixParser import CyamixParser
+from compiler.utils import write_code_to_c_file
+from compiler.code_generator import CyamixToCVisitor
 from error_listener import CyamixErrorListener
 from semantic_analyzer import SemanticAnalyzer
 
@@ -84,6 +86,17 @@ def main():
     else:
         print(f"Error: Path not found: {input_path}")
         sys.exit(1)
+
+        visitor = CyamixToCVisitor()
+
+        visitor.visit(tree)
+        c_code = visitor.code
+
+
+        file_base_name = sys.argv[1].split('.cyx')[0]
+        write_code_to_c_file(c_code, file_base_name)
+
+        print("\nGenerated code in /generated/" + file_base_name + ".c")
 
 if __name__ == "__main__":
     main()
