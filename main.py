@@ -1,57 +1,89 @@
 import sys
+import glob
+import os
 from antlr4 import FileStream, CommonTokenStream
 from CyamixLexer import CyamixLexer
 from CyamixParser import CyamixParser
-
 from error_listener import CyamixErrorListener
+from semantic_analyzer import SemanticAnalyzer
 
-def run_parser(file_path: str) -> list[str]:
+files_to_process = []
+
+def run_parser(file_path: str):
     """
-    This is the dedicated parsing function.
-    It contains the core parsing logic.
-    It takes a file path, runs the parser, and returns a list of errors.
+    Runs the parser (SYNTAX) and returns the TREE and SYNTAX ERRORS.
     """
-    
     try:
         input_stream = FileStream(file_path, encoding='utf-8')
     except FileNotFoundError:
-        return [f"Error: File not found at path: {file_path}"]
+        return None, [f"Error: File not found at path: {file_path}"]
     except Exception as e:
-        return [f"Error opening file: {e}"]
+        return None, [f"Error opening file: {e}"]
 
     lexer = CyamixLexer(input_stream)
     stream = CommonTokenStream(lexer)
     parser = CyamixParser(stream)
 
     error_listener = CyamixErrorListener()
-    parser.removeErrorListeners() 
+    parser.removeErrorListeners()
     parser.addErrorListener(error_listener)
 
     tree = parser.program()
 
-    return error_listener.errors
+    return tree, error_listener.errors
 
-def main():
-    """
-    Main entry point for the script.
-    Handles command-line arguments and prints the final result.
-    """
-    if len(sys.argv) < 2:
-        print("Usage: python main.py <source.cyx>")
-        sys.exit(1)
+def process_file(file_path: str):
+    """Orchestrates the analysis for a single file and prints the result."""
+    print(f"\n--- Starting compilation of {os.path.basename(file_path)} ---")
+    
+    print("Running Lexical and Syntactic Analysis...")
+    tree, syntax_errors = run_parser(file_path)
 
-    file_path = sys.argv[1]
-    print(f"Starting parsing of {file_path}...")
-
-    errors = run_parser(file_path)
-
-    if errors:
-        print("\nParsing failed! Errors found:")
-        for error in errors:
-            print(error)
-        sys.exit(1)
+    if syntax_errors:
+        print("Analysis failed! Syntax errors found:")
+        for error in syntax_errors:
+            print(f"    {error}")
+        return
+    
+    print("Lexical and Syntactic Analysis passed successfully.")
+        
+    print("Running Semantic Analysis...")
+    
+    analyzer = SemanticAnalyzer()
+    analyzer.visit(tree)
+    semantic_errors = analyzer.semantic_errors
+    
+    if semantic_errors:
+        print("Analysis failed! Semantic errors found:")
+        for error in semantic_errors:
+            print(f"    {error}")
     else:
-        print("\nParsing completed successfully (correct syntax)!")
+        print("Semantic Analysis passed successfully!")
+    
+def main():
+    if len(sys.argv) < 2:
+        print("Usage: python main.py <file_or_directory>")
+        sys.exit(1)
+
+    input_path = sys.argv[1]
+
+    if os.path.isdir(input_path):
+        print(f"Processing all files in directory: {input_path}")
+        files_to_process = sorted(glob.glob(os.path.join(input_path, '*.cyx')))
+        
+        if not files_to_process:
+             print("No .cyx files found in the specified directory.")
+             sys.exit(0)
+             
+        for file_path in files_to_process:
+            process_file(file_path)
+            
+    elif os.path.isfile(input_path):
+        process_file(input_path)
+        
+    else:
+        print(f"Error: Path not found: {input_path}")
+        sys.exit(1)
 
 if __name__ == "__main__":
     main()

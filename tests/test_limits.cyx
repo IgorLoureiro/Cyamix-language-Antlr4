@@ -1,0 +1,21 @@
+int a = 1;
+float b = 2.0;
+boolean c = true;
+char d = 'x';
+
+// ERRO 1: Aritmética com Booleano
+int e = a + c;     // Erro: int + boolean
+
+// ERRO 2: Atribuição de String para Numérico (já funcionava, mas testa propagação)
+int f = a * "texto"; // Erro: int * string
+
+// ERRO 3: Lógica com Tipos Inválidos
+if (a || b) {      // Erro: int || float
+    printf("erro");
+}
+
+// ERRO 4: Unário em Booleano
+int g = -c;        // Erro: -boolean
+
+// ERRO 5: Comparação Incompatível
+boolean h = a == c; // Erro: int == boolean
