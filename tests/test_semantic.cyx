@@ -1,0 +1,13 @@
+// Perfect syntax! But logic (semantic) errors.
+
+int number = 5;
+char genre = 'M';
+
+// 1. Type error
+number = genre;
+
+// 2. Undeclared variable error
+count = 10;
+
+// 3. Duplicate declaration error
+int number = 10;
