@@ -1,0 +1,4 @@
+// Syntax Error: The Parser knows what the tokens are,
+// but they are in the wrong order (missing a ';' at the end).
+int a = 5
+int b = 10;
