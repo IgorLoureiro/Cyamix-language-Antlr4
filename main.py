@@ -89,7 +89,6 @@ def main():
 
         visitor = CyamixToCVisitor()
 
-        # Visita a árvore e gera o código C
         visitor.visit(tree)
         c_code = visitor.code
 
@@ -97,7 +96,7 @@ def main():
         file_base_name = sys.argv[1].split('.cyx')[0]
         write_code_to_c_file(c_code, file_base_name)
 
-        print("\nCódigo C gerado em output.c")
+        print("\nGenerated code in /generated/" + file_base_name + ".c")
 
 if __name__ == "__main__":
     main()

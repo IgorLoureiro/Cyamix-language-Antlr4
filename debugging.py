@@ -19,7 +19,7 @@ class MyErrorListener(ErrorListener):
         return len(self.errors) > 0
 
 def main():
-    cyx_file = 'test.cyx'
+    cyx_file = 'tests/test.cyx'
 
     input_stream = FileStream(cyx_file, encoding='utf-8')
     
