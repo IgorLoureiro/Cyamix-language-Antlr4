@@ -1,5 +1,5 @@
-from CyamixVisitor import CyamixVisitor
-from CyamixParser import CyamixParser
+from grammar.CyamixVisitor import CyamixVisitor
+from grammar.CyamixParser import CyamixParser
 from antlr4.tree.Tree import TerminalNode
 from antlr4 import ParserRuleContext
 
