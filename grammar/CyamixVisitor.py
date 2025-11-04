@@ -3,7 +3,7 @@ from antlr4 import *
 if "." in __name__:
     from .CyamixParser import CyamixParser
 else:
-    from CyamixParser import CyamixParser
+    from grammar.CyamixParser import CyamixParser
 
 # This class defines a complete generic visitor for a parse tree produced by CyamixParser.
 

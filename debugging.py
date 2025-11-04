@@ -1,55 +1,33 @@
-import sys
-from antlr4 import *
-from antlr4.error.ErrorListener import ErrorListener
-from CyamixLexer import CyamixLexer
-from CyamixParser import CyamixParser
-from compiler.utils import write_code_to_c_file
-from compiler.code_generator import CyamixToCVisitor
+import os
+import glob
+from compiler.compiler import compile_file
 
-class MyErrorListener(ErrorListener):
-    def __init__(self):
-        super(MyErrorListener, self).__init__()
-        self.errors = []
-
-    def syntaxError(self, recognizer, offendingSymbol, line, column, msg, e):
-        error_msg = f"Error on {line}:{column} -> {msg}"
-        self.errors.append(error_msg)
-
-    def hasErrors(self):
-        return len(self.errors) > 0
+# Caminho do arquivo ou diretório de teste
+TEST_FILE = "tests/test.cyx"
+# TEST_DIR = "tests"  # se quiser processar todos os .cyx do diretório
 
 def main():
-    cyx_file = 'tests/test.cyx'
+    input_path = TEST_FILE  # ou TEST_DIR
 
-    input_stream = FileStream(cyx_file, encoding='utf-8')
-    
-    lexer = CyamixLexer(input_stream)
-    stream = CommonTokenStream(lexer)
-    parser = CyamixParser(stream)
+    if os.path.isfile(input_path):
+        print(f"\n--- Compiling {os.path.basename(input_path)} ---")
+        success, messages = compile_file(input_path)
+        for msg in messages:
+            print(msg)
 
-    error_listener = MyErrorListener()
-    parser.removeErrorListeners()
-    parser.addErrorListener(error_listener)
+    elif os.path.isdir(input_path):
+        files = sorted(glob.glob(os.path.join(input_path, "*.cyx")))
+        if not files:
+            print("No .cyx files found in directory.")
+            return
+        for f in files:
+            print(f"\n--- Compiling {os.path.basename(f)} ---")
+            success, messages = compile_file(f)
+            for msg in messages:
+                print(msg)
 
-    print(f"Start parsing if {cyx_file}...")
-    tree = parser.program()
-
-    if error_listener.hasErrors():
-        print("\nParsing faild! Errors found:")
-        for error in error_listener.errors:
-            print(error)
     else:
-        print("\nParsing completed!")
-
-        visitor = CyamixToCVisitor()
-        visitor.visit(tree)
-        c_code = visitor.code
-
-
-        file_base_name = cyx_file.split('.cyx')[0]
-        write_code_to_c_file(c_code, file_base_name)
-
-        print("\nGenerated code in /generated/" + file_base_name + ".c")
+        print(f"Error: Path not found: {input_path}")
 
 if __name__ == "__main__":
     main()
