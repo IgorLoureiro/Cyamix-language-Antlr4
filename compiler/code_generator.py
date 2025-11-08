@@ -12,7 +12,7 @@ class CyamixToCVisitor(CyamixVisitor):
     # Declarations
     # -------------------------
     def visitVarDecl(self, ctx):
-        type_name = ctx.type_().getText() 
+        type_name = ctx.type_().getText()
         name = ctx.ID().getText()
 
         c_type = {
@@ -20,7 +20,7 @@ class CyamixToCVisitor(CyamixVisitor):
             "float": "float",
             "char": "char",
             "boolean": "int"  # boolean -> int
-        }[type_name]
+        }.get(type_name, type_name)
 
         value = ""
         if ctx.expr():
@@ -28,7 +28,6 @@ class CyamixToCVisitor(CyamixVisitor):
             value = f" = {expr_value}" if expr_value else ""
 
         line = f"{c_type} {name}{value};\n"
-        self.code += line
         return line
 
     # -------------------------
@@ -38,14 +37,14 @@ class CyamixToCVisitor(CyamixVisitor):
         name = ctx.ID().getText()
         value = self.visit(ctx.expr()) or ""
         line = f"{name} = {value};\n"
-        self.code += line
         return line
 
     # -------------------------
     # Expressions
     # -------------------------
     def visitExpr(self, ctx):
-        return self.visit(ctx.getChild(0))  # expr -> logicalOrExpr
+        # expr -> logicalOrExpr
+        return self.visit(ctx.getChild(0))
 
     def visitLogicalOrExpr(self, ctx):
         parts = [self.visit(ctx.logicalAndExpr(i)) for i in range(len(ctx.logicalAndExpr()))]
@@ -56,23 +55,11 @@ class CyamixToCVisitor(CyamixVisitor):
         return " && ".join(parts)
 
     def visitEqualityExpr(self, ctx):
+        rel_exprs = list(ctx.relationalExpr())
         children = list(ctx.getChildren())
-        if len(children) == 1:
-            return self.visit(ctx.relationalExpr(0))
-        expr = self.visit(ctx.relationalExpr(0))
-        for i, op in enumerate(ctx.getChildren()[1::2]):
-            right = self.visit(ctx.relationalExpr(i + 1))
-            expr = f"{expr} {op.getText()} {right}"
-        return expr
-
-    def visitEqualityExpr(self, ctx):
-        rel_exprs = list(ctx.relationalExpr())  # todos os relationalExpr filhos
-        children = list(ctx.getChildren())      # todos os filhos (expressões e operadores)
-        
         expr = self.visit(rel_exprs[0])
-        # operadores estão entre os relationalExpr, começando no índice 1 e pulando de 2 em 2
         for i, rel in enumerate(rel_exprs[1:]):
-            op = children[i*2 + 1].getText()  # pega operador
+            op = children[i*2 + 1].getText()  # operador entre os relationalExpr
             expr = f"{expr} {op} {self.visit(rel)}"
         return expr
 
@@ -125,7 +112,7 @@ class CyamixToCVisitor(CyamixVisitor):
         return ""
 
     # -------------------------
-    # Optional: print statements
+    # Function Call
     # -------------------------
     def visitFuncCall(self, ctx):
         func_name = ctx.getChild(0).getText()
@@ -134,5 +121,159 @@ class CyamixToCVisitor(CyamixVisitor):
             arg_values = [self.visit(arg) for arg in ctx.argList().arg()]
             args = ", ".join(arg_values)
         line = f"{func_name}({args});\n"
-        self.code += line
         return line
+
+    # -------------------------
+    # Program
+    # -------------------------
+    def visitProgram(self, ctx):
+        out = []
+        # geralmente o último filho é EOF
+        for i in range(ctx.getChildCount() - 1):
+            res = self.visit(ctx.getChild(i))
+            if isinstance(res, str):
+                out.append(res)
+        text = "".join(out)
+        self.code = text  # único ponto onde populamos self.code
+        return text
+
+    # -------------------------
+    # Top-level Declarations
+    # -------------------------
+    def visitTopDecl(self, ctx):
+        # ajuste conforme sua gramática (se topDecl puder ser mais do que varDecl)
+        if ctx.varDecl():
+            return self.visit(ctx.varDecl())
+        if ctx.statement():
+            return self.visit(ctx.statement())
+        return ""
+
+    # -------------------------
+    # Statements
+    # -------------------------
+    def visitStatement(self, ctx):
+        for i in range(ctx.getChildCount()):
+            res = self.visit(ctx.getChild(i))
+            if isinstance(res, str) and res != "":
+                return res
+        return ""
+
+    # -------------------------
+    # Block
+    # -------------------------
+    def visitBlock(self, ctx):
+        text = "{\n"
+        for i in range(1, ctx.getChildCount() - 1):
+            res = self.visit(ctx.getChild(i))
+            if isinstance(res, str):
+                text += res
+        text += "}\n"
+        return text
+
+    # -------------------------
+    # If / Else
+    # -------------------------
+    def visitIfStmt(self, ctx):
+        cond = self.visit(ctx.expr())
+        then_code = self.visit(ctx.statement(0))
+        code = f"if ({cond}) {then_code}"
+        if ctx.statement(1):
+            code += f"else {self.visit(ctx.statement(1))}"
+        return code
+
+    # -------------------------
+    # While
+    # -------------------------
+    def visitWhileStmt(self, ctx):
+        cond = self.visit(ctx.expr())
+        body = self.visit(ctx.statement())
+        code = f"while ({cond}) {body}"
+        return code
+
+    # -------------------------
+    # Do While
+    # -------------------------
+    def visitDoWhileStmt(self, ctx):
+        body = self.visit(ctx.statement())
+        cond = self.visit(ctx.expr())
+        code = f"do {body} while ({cond});\n"
+        return code
+
+    # -------------------------
+    # For Loop
+    # -------------------------
+    def visitForStmt(self, ctx):
+        init = self.visit(ctx.forInit()) if ctx.forInit() else ""
+        cond = self.visit(ctx.expr()) if ctx.expr() else ""
+        update = self.visit(ctx.forUpdate()) if ctx.forUpdate() else ""
+        body = self.visit(ctx.statement())
+        init = init.strip()
+        if init.endswith(";"):
+            init = init[:-1]
+        code = f"for ({init}; {cond}; {update}) {body}"
+        return code
+
+    # -------------------------
+    # For Init
+    # -------------------------
+    def visitForInit(self, ctx):
+        if ctx.varDeclNoSemi():
+            return self.visit(ctx.varDeclNoSemi())
+        if ctx.assignmentNoSemi():
+            return self.visit(ctx.assignmentNoSemi())
+        return ""
+
+    # -------------------------
+    # For Update
+    # -------------------------
+    def visitForUpdate(self, ctx):
+        return ", ".join(self.visit(a) for a in ctx.assignmentNoSemi())
+
+    # -------------------------
+    # Assignment (no semicolon)
+    # -------------------------
+    def visitAssignmentNoSemi(self, ctx):
+        return f"{ctx.ID().getText()} = {self.visit(ctx.expr())}"
+
+    # -------------------------
+    # Var Declaration (no semicolon)
+    # -------------------------
+    def visitVarDeclNoSemi(self, ctx):
+        type_name = ctx.type_().getText()
+        name = ctx.ID().getText()
+        c_type = {
+            "int": "int",
+            "float": "float",
+            "char": "char",
+            "boolean": "int"
+        }.get(type_name, type_name)
+        init = ""
+        if ctx.expr():
+            init = f" = {self.visit(ctx.expr())}"
+        return f"{c_type} {name}{init}"
+
+    # -------------------------
+    # Relational Expressions
+    # -------------------------
+    def visitRelationalExpr(self, ctx):
+        adds = list(ctx.additiveExpr())
+        children = list(ctx.getChildren())
+        expr = self.visit(adds[0])
+        for i, a in enumerate(adds[1:]):
+            op = children[i*2 + 1].getText()
+            expr = f"{expr} {op} {self.visit(a)}"
+        return expr
+
+    # -------------------------
+    # Function Call Arguments
+    # -------------------------
+    def visitArgList(self, ctx):
+        return ", ".join(self.visit(a) for a in ctx.arg())
+
+    def visitArg(self, ctx):
+        if ctx.expr():
+            return self.visit(ctx.expr())
+        for i in range(ctx.getChildCount() - 1):
+            if ctx.getChild(i).getText() == "&":
+                return f"&{ctx.getChild(i+1).getText()}"
+        return ""
