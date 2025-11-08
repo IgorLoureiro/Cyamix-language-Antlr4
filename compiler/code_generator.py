@@ -59,7 +59,7 @@ class CyamixToCVisitor(CyamixVisitor):
         children = list(ctx.getChildren())
         expr = self.visit(rel_exprs[0])
         for i, rel in enumerate(rel_exprs[1:]):
-            op = children[i*2 + 1].getText()  # operador entre os relationalExpr
+            op = children[i*2 + 1].getText()  
             expr = f"{expr} {op} {self.visit(rel)}"
         return expr
 
@@ -128,20 +128,20 @@ class CyamixToCVisitor(CyamixVisitor):
     # -------------------------
     def visitProgram(self, ctx):
         out = []
-        # geralmente o último filho é EOF
+        
         for i in range(ctx.getChildCount() - 1):
             res = self.visit(ctx.getChild(i))
             if isinstance(res, str):
                 out.append(res)
         text = "".join(out)
-        self.code = text  # único ponto onde populamos self.code
+        self.code = text  
         return text
 
     # -------------------------
     # Top-level Declarations
     # -------------------------
     def visitTopDecl(self, ctx):
-        # ajuste conforme sua gramática (se topDecl puder ser mais do que varDecl)
+        
         if ctx.varDecl():
             return self.visit(ctx.varDecl())
         if ctx.statement():
