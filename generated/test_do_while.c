@@ -1,0 +1,7 @@
+int i;
+i = 0;
+do {
+printf("i: ", i);
+i = i + 1;
+}
+ while (i < 3);

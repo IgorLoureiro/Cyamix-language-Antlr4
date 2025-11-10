@@ -1,22 +1,15 @@
-// Validando comandos de leitura e escrita com variáveis de tipos diferentes.
-
 int idade;
 float altura;
 char inicial;
-boolean ativo;
-
+int ativo;
 printf("Digite sua idade: ");
 scanf("%d", idade);
-
 printf("Digite sua altura: ");
 scanf("%f", altura);
-
 printf("Digite sua inicial: ");
 scanf("%c", inicial);
-
 printf("Voce esta ativo? (1 para sim, 0 para nao): ");
 scanf("%d", ativo);
-
 printf("Resumo dos dados:");
 printf("Idade: ", idade);
 printf("Altura: ", altura);

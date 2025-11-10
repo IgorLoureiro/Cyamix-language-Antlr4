@@ -1,15 +1,11 @@
-// Declarações e atribuições válidas com diferentes tipos
-
 int idade;
 float altura;
 char inicial;
-boolean ativo;
-
+int ativo;
 idade = 25;
 altura = 1.72;
 inicial = 'G';
 ativo = 1 == 1;
-
 printf("Idade: ", idade);
 printf("Altura: ", altura);
 printf("Inicial: ", inicial);

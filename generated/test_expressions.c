@@ -1,14 +1,10 @@
-// Teste de precedência de operações matemáticas e lógicas.
-
 int a;
 int b;
 float resultado;
-boolean teste;
-
+int teste;
 a = 10;
 b = 3;
 resultado = (a + b) * 2 - (b / a);
 teste = (a > b) && (resultado != 0);
-
 printf("Resultado: ", resultado);
 printf("Teste: ", teste);
