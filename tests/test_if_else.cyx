@@ -1,10 +1,10 @@
-// Condição com blocos
+// Condition with blocks
 
-int idade;
-idade = 20;
+int age;
+age = 20;
 
-if (idade >= 18) {
-    printf("Maior de idade");
+if (age >= 18) {
+    printf("Adult");
 } else {
-    printf("Menor de idade");
+   printf("Minor");
 }

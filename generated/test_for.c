@@ -1,7 +1,7 @@
 int i;
-int soma;
-soma = 0;
+int sum;
+sum = 0;
 for (i = 0; i < 5; i = i + 1) {
-soma = soma + i;
+sum = sum + i;
 }
-printf("Soma total: ", soma);
+printf("Total sum: %d", sum);

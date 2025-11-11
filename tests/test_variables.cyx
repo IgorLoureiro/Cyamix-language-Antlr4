@@ -1,16 +1,16 @@
-// Declarações e atribuições válidas com diferentes tipos
+//Valid declarations and assignments with different types
 
-int idade;
-float altura;
-char inicial;
-boolean ativo;
+int age;
+float height;
+char initial;
+boolean active;
 
-idade = 25;
-altura = 1.72;
-inicial = 'G';
-ativo = 1 == 1;
+age = 25;
+height = 1.72;
+initial = 'G';
+active = 1 == 1;
 
-printf("Idade: ", idade);
-printf("Altura: ", altura);
-printf("Inicial: ", inicial);
-printf("Ativo: ", ativo);
+printf("Age: %d\n", age);
+printf("Height: %.2f\n", height);
+printf("Initial: %c\n", initial);
+printf("Active: %d\n", active);

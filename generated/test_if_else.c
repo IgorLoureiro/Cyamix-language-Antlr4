@@ -1,8 +1,8 @@
-int idade;
-idade = 20;
-if (idade >= 18) {
-printf("Maior de idade");
+int age;
+age = 20;
+if (age >= 18) {
+printf("Adult");
 }
 else {
-printf("Menor de idade");
+printf("Minor");
 }

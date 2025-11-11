@@ -1,10 +1,10 @@
 int a;
 int b;
-float resultado;
-int teste;
+float result;
+int test;
 a = 10;
 b = 3;
-resultado = (a + b) * 2 - (b / a);
-teste = (a > b) && (resultado != 0);
-printf("Resultado: ", resultado);
-printf("Teste: ", teste);
+result = (a + b) * 2 - (b / a);
+test = (a > b) && (result != 0);
+printf("Result: %.2f\n", result);
+printf("Test: %d\n", test);

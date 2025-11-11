@@ -1,7 +1,7 @@
 int i;
 i = 0;
 do {
-printf("i: ", i);
+printf("i: %d\n", i);
 i = i + 1;
 }
  while (i < 3);

@@ -1,24 +1,26 @@
-// Validando comandos de leitura e escrita com variáveis de tipos diferentes.
+// Validating read and write operations (scanf, printf) with variables of different types.
 
-int idade;
-float altura;
-char inicial;
-boolean ativo;
 
-printf("Digite sua idade: ");
-scanf("%d", idade);
+int age;
+float height;
+char initial;
+boolean active;
 
-printf("Digite sua altura: ");
-scanf("%f", altura);
+printf("Enter your age: ");
+scanf("%d", &age);
 
-printf("Digite sua inicial: ");
-scanf("%c", inicial);
+printf("Enter your height: ");
+scanf("%f", &height);
 
-printf("Voce esta ativo? (1 para sim, 0 para nao): ");
-scanf("%d", ativo);
+printf("Enter your initial: ");
+scanf(" %c", &initial);
 
-printf("Resumo dos dados:");
-printf("Idade: ", idade);
-printf("Altura: ", altura);
-printf("Inicial: ", inicial);
-printf("Ativo: ", ativo);
+printf("Are you active? (1 for yes, 0 for no): ");
+scanf("%d", &active);
+
+printf("\nData Summary:\n");
+
+printf("Age: %d\n", age);
+printf("Height: %.2f\n", height);
+printf("Initial: %c\n", initial);
+printf("Active: %d\n", active);

@@ -1,39 +1,39 @@
 int i;
-int numero;
-int soma;
-float media;
-int qtd;
-int continuar;
-soma = 0;
-qtd = 0;
-continuar = 1 == 1;
-printf("=== Programa de Cálculo de Média ===");
+int number;
+int sum;
+float average;
+int count;
+int proceed;
+sum = 0;
+count = 0;
+proceed = 1 == 1;
+printf("\n=== Average Calculation Program ===\n");
 do {
-printf("Digite um número: ");
-scanf("%d", numero);
-soma = soma + numero;
-qtd = qtd + 1;
-printf("Deseja continuar? (1 para sim, 0 para nao): ");
-scanf("%d", continuar);
+printf("Enter a number: ");
+scanf("%d", &number);
+sum = sum + number;
+count = count + 1;
+printf("Do you want to proceed? (1 for yes, 0 for no): ");
+scanf("%d", &proceed);
 }
- while (continuar);
-printf("Números lidos: ", qtd);
-printf("Soma total: ", soma);
-if (qtd > 0) {
-media = soma / qtd;
-printf("Média final: ", media);
+ while (proceed);
+printf("\nNumbers read: %d\n", count);
+printf("Total sum: %d\n", sum);
+if (count > 0) {
+average = 1.0 * sum / count;
+printf("Final average: %.2f\n", average);
 }
 else {
-printf("Nenhum número foi informado.");
+printf("No number was entered.\n");
 }
-printf("=== Teste de repetição for ===");
+printf("\n=== For loop test ===\n");
 for (i = 1; i <= 5; i = i + 1) {
-printf("Valor atual de i: ", i);
+printf("Current value of i: %d\n", i);
 }
-printf("=== Teste de repetição while ===");
+printf("\n=== While loop test ===\n");
 i = 0;
 while (i < 3) {
-printf("Contador: ", i);
+printf("Counter: %d\n", i);
 i = i + 1;
 }
-printf("=== Fim do programa ===");
+printf("\n=== End of program ===\n");
