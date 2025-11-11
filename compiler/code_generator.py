@@ -133,7 +133,8 @@ class CyamixToCVisitor(CyamixVisitor):
             res = self.visit(ctx.getChild(i))
             if isinstance(res, str):
                 out.append(res)
-        text = "".join(out)
+        body = "".join(out)
+        text = "#include <stdio.h> \n\nvoid main() {\n" + body + "}\n"
         self.code = text  
         return text
 
