@@ -1,4 +1,4 @@
-// Validação de estrutura for com incremento e operação aritmética.
+// Validation of for-structure with increment and arithmetic operation.
 
 int i;
 int sum;

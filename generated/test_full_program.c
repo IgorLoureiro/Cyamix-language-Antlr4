@@ -1,3 +1,6 @@
+#include <stdio.h> 
+
+void main() {
 int i;
 int number;
 int sum;
@@ -37,3 +40,4 @@ printf("Counter: %d\n", i);
 i = i + 1;
 }
 printf("\n=== End of program ===\n");
+}

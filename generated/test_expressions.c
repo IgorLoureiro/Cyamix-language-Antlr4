@@ -1,3 +1,6 @@
+#include <stdio.h> 
+
+void main() {
 int a;
 int b;
 float result;
@@ -8,3 +11,4 @@ result = (a + b) * 2 - (b / a);
 test = (a > b) && (result != 0);
 printf("Result: %.2f\n", result);
 printf("Test: %d\n", test);
+}

@@ -114,7 +114,7 @@ CYAMIX-LANGUAGE-ANTLR4/
 ## 🚀 Example usage
 
 ```bash
-python main.py test.cyx
+python main.py tests/test.cyx
 ```
 
 If the syntax is correct, the compiler will display:

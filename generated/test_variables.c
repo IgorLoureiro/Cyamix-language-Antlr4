@@ -1,3 +1,6 @@
+#include <stdio.h> 
+
+void main() {
 int age;
 float height;
 char initial;
@@ -10,3 +13,4 @@ printf("Age: %d\n", age);
 printf("Height: %.2f\n", height);
 printf("Initial: %c\n", initial);
 printf("Active: %d\n", active);
+}

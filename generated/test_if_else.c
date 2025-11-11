@@ -1,3 +1,6 @@
+#include <stdio.h> 
+
+void main() {
 int age;
 age = 20;
 if (age >= 18) {
@@ -5,4 +8,5 @@ printf("Adult");
 }
 else {
 printf("Minor");
+}
 }
