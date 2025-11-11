@@ -68,7 +68,7 @@ class CyamixToCVisitor(CyamixVisitor):
         if len(children) == 1:
             return self.visit(ctx.multiplicativeExpr(0))
         expr = self.visit(ctx.multiplicativeExpr(0))
-        for i, op in enumerate(ctx.getChildren()[1::2]):
+        for i, op in enumerate(children[1::2]):
             right = self.visit(ctx.multiplicativeExpr(i + 1))
             expr = f"{expr} {op.getText()} {right}"
         return expr
@@ -78,7 +78,7 @@ class CyamixToCVisitor(CyamixVisitor):
         if len(children) == 1:
             return self.visit(ctx.unaryExpr(0))
         expr = self.visit(ctx.unaryExpr(0))
-        for i, op in enumerate(ctx.getChildren()[1::2]):
+        for i, op in enumerate(children[1::2]):
             right = self.visit(ctx.unaryExpr(i + 1))
             expr = f"{expr} {op.getText()} {right}"
         return expr
@@ -133,7 +133,8 @@ class CyamixToCVisitor(CyamixVisitor):
             res = self.visit(ctx.getChild(i))
             if isinstance(res, str):
                 out.append(res)
-        text = "".join(out)
+        body = "".join(out)
+        text = "#include <stdio.h> \n\nvoid main() {\n" + body + "}\n"
         self.code = text  
         return text
 

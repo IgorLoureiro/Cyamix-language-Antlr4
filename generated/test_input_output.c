@@ -1,0 +1,21 @@
+#include <stdio.h> 
+
+void main() {
+int age;
+float height;
+char initial;
+int active;
+printf("Enter your age: ");
+scanf("%d", &age);
+printf("Enter your height: ");
+scanf("%f", &height);
+printf("Enter your initial: ");
+scanf(" %c", &initial);
+printf("Are you active? (1 for yes, 0 for no): ");
+scanf("%d", &active);
+printf("\nData Summary:\n");
+printf("Age: %d\n", age);
+printf("Height: %.2f\n", height);
+printf("Initial: %c\n", initial);
+printf("Active: %d\n", active);
+}

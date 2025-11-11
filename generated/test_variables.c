@@ -1,0 +1,16 @@
+#include <stdio.h> 
+
+void main() {
+int age;
+float height;
+char initial;
+int active;
+age = 25;
+height = 1.72;
+initial = 'G';
+active = 1 == 1;
+printf("Age: %d\n", age);
+printf("Height: %.2f\n", height);
+printf("Initial: %c\n", initial);
+printf("Active: %d\n", active);
+}
