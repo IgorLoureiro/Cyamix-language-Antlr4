@@ -1,29 +1,29 @@
 # 🧩 Compilador Cyamix
 
-🌎 Idiomas disponíveis:
+🌎 **Idiomas disponíveis:**
 
 - [🇺🇸 English](README.md)
 - [🇧🇷 Português](README.pt-BR.md)
 
-Este projeto implementa um **compilador para a linguagem Cyamix**, utilizando **ANTLR4** para análise léxica e sintática, e **Python** para geração de código C.
+Este projeto implementa um **compilador para a linguagem Cyamix**, utilizando o **ANTLR4** para análise léxica e sintática, e **Python** para **geração de código em C**.
 
 ---
 
-## ⚙️ Instalação do ANTLR4
+## ⚙️ Instalando o ANTLR4
 
-1. **Baixe o JAR do ANTLR4**:
-   [https://www.antlr.org/download/antlr-4.13.2-complete.jar](https://www.antlr.org/download/antlr-4.13.2-complete.jar)
+1. **Baixe o arquivo JAR do ANTLR4:**  
+   👉 [https://www.antlr.org/download/antlr-4.13.2-complete.jar](https://www.antlr.org/download/antlr-4.13.2-complete.jar)
 
-2. Opcionalmente, mova o arquivo para uma pasta de fácil acesso, como:
-   ```
+2. Opcionalmente, mova o arquivo para uma pasta de fácil acesso:
+   ```bash
    C:\antlr\antlr-4.13.2-complete.jar
    ```
 
 ---
 
-## 📦 Instalar dependências Python
+## 📦 Instalando dependências Python
 
-Antes de rodar o compilador, instale as dependências:
+Antes de executar o compilador, instale as dependências necessárias:
 
 ```bash
 pip install -r requirements.txt
@@ -31,22 +31,20 @@ pip install -r requirements.txt
 
 ---
 
-## 🧠 Regenerar arquivos ANTLR (Lexer, Parser, Visitor, Listener)
+## 🧠 Regenerar arquivos do ANTLR (Lexer, Parser, Visitor, Listener)
 
-Sempre que você modificar o arquivo **`Cyamix.g4`**, é necessário regerar os artefatos do ANTLR:
+Sempre que modificar o arquivo **`Cyamix.g4`**, é necessário regenerar os artefatos do ANTLR:
 
 ```bash
 java -jar C:\antlr\antlr-4.13.2-complete.jar -Dlanguage=Python3 -visitor -listener Cyamix.g4
 ```
 
-📁 Isso gerará (ou atualizará) os arquivos:
+📁 Isso irá gerar (ou atualizar) os seguintes arquivos:
 
 - `CyamixLexer.py`
 - `CyamixParser.py`
 - `CyamixListener.py`
 - `CyamixVisitor.py`
-- `Cyamix.tokens`
-- `Cyamix.interp`
 
 ---
 
@@ -54,99 +52,109 @@ java -jar C:\antlr\antlr-4.13.2-complete.jar -Dlanguage=Python3 -visitor -listen
 
 Para facilitar o desenvolvimento da gramática:
 
-> **ANTLR4 grammar syntax support**  
+> **ANTLR4 grammar syntax support**
 > Autor: _Mike Lischke_
 
-🟢 Essa extensão adiciona **realce de sintaxe**, **navegação entre regras** e **validação de gramática** diretamente no VSCode.
+🟢 Esta extensão adiciona **realce de sintaxe**, **navegação entre regras** e **validação de gramática** diretamente no VS Code.
 
 ---
 
-## 🐞 Debug do compilador
+## 🐞 Depuração do compilador
 
 Para depurar o processo de compilação:
 
-1. Abra o projeto no **VSCode**
-2. Configure o arquivo `debugging.py` alterando o nome do arquivo `.cyx` que deseja testar
-3. Execute o projeto em **modo Debug (F5)**
+1. Abra o projeto no **VS Code**
+2. Edite o arquivo `debugging.py` e defina o nome do arquivo `.cyx` que deseja testar
+3. Execute o projeto no **modo Debug (F5)**
 
-Isso permite inspecionar cada etapa do processo de parsing e geração de código C.
+Isso permite inspecionar cada etapa da análise e geração de código C.
 
 ---
 
 ## 🧱 Estrutura do projeto
 
-```
-cyamix_compiler/
-├─ Cyamix.g4                # Gramática ANTLR4 da linguagem Cyamix
-├─ generated/               # Arquivos gerados automaticamente (Lexer, Parser, Visitor, Listener)
+```plaintext
+CYAMIX-LANGUAGE-ANTLR4/
 ├─ compiler/
-│  ├─ analyzer.py           # Realiza a análise sintática e semântica
-│  ├─ code_generator.py     # Visitor que percorre a AST e gera código C
-│  └─ utils.py              # Funções auxiliares (ex: salvar arquivos)
-├─ main.py                  # Ponto de entrada do compilador
-├─ debugging.py             # Script auxiliar para depuração
-└─ requirements.txt         # Dependências do projeto
+│  ├─ code_generator.py      # Gera o código C equivalente a partir da AST do Cyamix
+│  ├─ compiler.py            # Lógica principal e orquestração do compilador
+│  ├─ error_listener.py      # Listener de erros personalizado do ANTLR
+│  └─ semantic_analyzer.py   # Validação semântica e verificação de símbolos
+│
+├─ generated/                # Arquivos C gerados automaticamente para testes
+│  └─ test.c ...
+│
+├─ grammar/                  # Gramática e arquivos Python gerados pelo ANTLR
+│  ├─ Cyamix.g4              # Definição da gramática da linguagem Cyamix
+│  ├─ CyamixLexer.py
+│  ├─ CyamixParser.py
+│  ├─ CyamixListener.py
+│  └─ CyamixVisitor.py
+│
+├─ tests/                    # Scripts e programas de teste para validação
+│  └─ test.cyx ...
+├─ .gitignore                # Regras de exclusão do Git
+├─ debugging.py              # Script auxiliar de depuração
+├─ main.py                   # Arquivo principal que executa o compilador
+└─ requirements.txt          # Bibliotecas necessárias para rodar o compilador
 ```
 
 ---
 
 ## 🏗️ Fluxo do compilador
 
-1. **Análise léxica:** quebra o código-fonte em tokens (`CyamixLexer`)
-2. **Análise sintática:** cria a árvore sintática (`CyamixParser`)
-3. **Verificação de erros:** usa `MyErrorListener` para capturar erros de sintaxe
-4. **Geração de código:** `CyamixToCVisitor` percorre a árvore e produz código C
-5. **Saída:** código C é salvo em `output.c`, que pode ser compilado com `gcc` ou `clang`
+1. **Análise léxica:** divide o código-fonte em tokens (`CyamixLexer`)
+2. **Análise sintática:** constrói a árvore sintática (`CyamixParser`)
+3. **Verificação de erros:** usa `CyamixErrorListener` para capturar erros
+4. **Geração de código:** `CyamixToCVisitor` percorre a árvore e gera código em C
+5. **Saída:** o código C é salvo em arquivos `.c`, compiláveis com `gcc` ou `clang`
 
 ---
 
 ## 🚀 Exemplo de uso
 
 ```bash
-python main.py exemplo.cyx
+python main.py test.cyx
 ```
 
 Se a sintaxe estiver correta, o compilador exibirá:
 
-```
-Iniciando parsing de exemplo.cyx...
-Parsing concluído com sucesso (sintaxe correta)!
-Código C gerado em output.c
-```
-
----
-
-## 🧰 Compilar o código gerado em C
-
-Após gerar o arquivo `output.c`, compile-o normalmente com o GCC:
-
-```bash
-gcc output.c -o programa.exe
-```
-
-E execute:
-
-```bash
-./programa.exe
+```text
+Iniciando análise de test.cyx...
+Análise concluída com sucesso (sintaxe válida)!
+Código C gerado em test.c
 ```
 
 ---
 
-## 📄 Explicação dos principais arquivos
+## 🧰 Compilar o código C gerado
 
-| Arquivo                        | Função                                                                                                                |
-| ------------------------------ | --------------------------------------------------------------------------------------------------------------------- |
-| **main.py**                    | Ponto de entrada do compilador. Faz a leitura do arquivo `.cyx`, executa o lexer, parser e chama o gerador de código. |
-| **Cyamix.g4**                  | Define a gramática da linguagem Cyamix (regras léxicas e sintáticas).                                                 |
-| **compiler/analyzer.py**       | Responsável por executar o parser e retornar a árvore sintática.                                                      |
-| **compiler/code_generator.py** | Implementa o Visitor que percorre a árvore e converte o código Cyamix em C.                                           |
-| **compiler/utils.py**          | Contém funções auxiliares (ex: salvar o código C em arquivo).                                                         |
-| **debugging.py**               | Script auxiliar para testar o compilador em modo debug no VSCode.                                                     |
-| **generated/**                 | Pasta onde ficam os arquivos gerados automaticamente pelo ANTLR (não edite manualmente).                              |
+Após gerar o arquivo `.c`, compile-o usando GCC ou um compilador online:
+
+[Compilador C Online](https://www.onlinegdb.com/online_c_compiler)
+
+```bash
+gcc test.c -o test.exe
+./test.exe
+```
+
+---
+
+## 📄 Principais arquivos
+
+| Arquivo                        | Descrição                                                                                |
+| ------------------------------ | ---------------------------------------------------------------------------------------- |
+| **main.py**                    | Ponto de entrada do compilador. Lê o arquivo `.cyx`, executa o parser e gera o código C. |
+| **Cyamix.g4**                  | Define a gramática da linguagem Cyamix (regras léxicas e sintáticas).                    |
+| **compiler/analyzer.py**       | Executa o parser e retorna a árvore sintática.                                           |
+| **compiler/code_generator.py** | Implementa o Visitor que converte código Cyamix em código C.                             |
+| **debugging.py**               | Script auxiliar para testar o compilador no modo debug.                                  |
+| **generated/**                 | Pasta contendo os arquivos C gerados automaticamente.                                    |
+| **grammar/**                   | Pasta contendo o parser e lexer gerados pelo ANTLR.                                      |
 
 ---
 
 ## 📄 Licença
 
-Projeto desenvolvido para fins educacionais e de pesquisa.  
-Distribuído sob a licença **MIT**.
+Este projeto foi desenvolvido para fins educacionais e de pesquisa.
+Distribuído sob a **licença MIT**.
