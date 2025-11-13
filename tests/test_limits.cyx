@@ -1,21 +1,23 @@
-int a = 1;
-float b = 2.0;
-boolean c = true;
-char d = 'x';
+program() {
+    int a = 1;
+    float b = 2.0;
+    boolean c = true;
+    char d = 'x';
 
-// ERROR 1: Arithmetic with Boolean
-int e = a + c;     // Error: int + boolean
+    // ERROR 1: Arithmetic with Boolean
+    int e = a + c;     // Error: int + boolean
 
-// ERROR 2: Assigning String to Numeric (it already worked, but tests propagation)
-int f = a * "text"; // Error: int * string
+    // ERROR 2: Assigning String to Numeric (it already worked, but tests propagation)
+    int f = a * "text"; // Error: int * string
 
-// ERROR 3: Logic with Invalid Types
-if (a || b) {      // Error: int || float
-    printf("error");
+    // ERROR 3: Logic with Invalid Types
+    if (a || b) {      // Error: int || float
+        printf("error");
+    }
+
+    // ERROR 4: Unary on Boolean
+    int g = -c;        // Error: -boolean
+
+    // ERROR 5: Incompatible Comparison
+    boolean h = a == c; // Error: int == boolean
 }
-
-// ERROR 4: Unary on Boolean
-int g = -c;        // Error: -boolean
-
-// ERROR 5: Incompatible Comparison
-boolean h = a == c; // Error: int == boolean

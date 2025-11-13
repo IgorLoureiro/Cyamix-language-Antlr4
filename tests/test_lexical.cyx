@@ -1,2 +1,4 @@
 // Lexical Error: The Lexer does not know what the symbol '@' is
-int a = 5 @ 10;
+program() {
+    int a = 5 @ 10;
+}

@@ -1,7 +1,9 @@
-int x = ;  // Error: the value of x
+program() {
+    int x = ;  // Error: the value of x
 
-if (x > 5 { // error: missing ')'
-    printf("erro");
+    if (x > 5 { // error: missing ')'
+        printf("erro");
+    }
+
+    float y = 3.14 // Error: Missing ';'
 }
-
-float y = 3.14 // Error: Missing ';'

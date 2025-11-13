@@ -16,7 +16,7 @@ grammar Cyamix;
 */
 
 program
-    : (topDecl | statement)* EOF
+    : PROGRAM '(' ')' block EOF
     ;
 
 /* Top-level: variable declarations or function-like declarations (future) */
@@ -168,6 +168,9 @@ type
 /* --------------------
    LEXER RULES
    -------------------- */
+
+/* Reserverd words */
+PROGRAM : 'program';
 
 /* Identifiers but reserve keywords via parser rules */
 ID : [a-zA-Z_] [a-zA-Z_0-9]* ;

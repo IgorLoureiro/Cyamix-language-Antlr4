@@ -1,11 +1,13 @@
 // Validation of for-structure with increment and arithmetic operation.
 
-int i;
-int sum;
-sum = 0;
+program() {
+    int i;
+    int sum;
+    sum = 0;
 
-for (i = 0; i < 5; i = i + 1) {
-    sum = sum + i;
+    for (i = 0; i < 5; i = i + 1) {
+        sum = sum + i;
+    }
+
+    printf("Total sum: %d", sum);
 }
-
-printf("Total sum: %d", sum);

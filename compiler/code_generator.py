@@ -3,7 +3,6 @@ from grammar.CyamixLexer import CyamixLexer
 from grammar.CyamixParser import CyamixParser
 from grammar.CyamixVisitor import CyamixVisitor
 
-
 class CyamixToCVisitor(CyamixVisitor):
     def __init__(self):
         self.code = ""
@@ -122,7 +121,26 @@ class CyamixToCVisitor(CyamixVisitor):
             args = ", ".join(arg_values)
         line = f"{func_name}({args});\n"
         return line
-
+    
+    # -------------------------
+    # Ident
+    # -------------------------
+    def indent_code(self, code: str, indent_str="    ") -> str:
+        indented_lines = []
+        level = 0
+        lines = code.splitlines()  
+        for line in lines:
+            stripped = line.strip()
+            if not stripped:
+                indented_lines.append("")
+                continue
+            if stripped.startswith("}"):
+                level -= 1
+            indented_lines.append(indent_str * level + stripped)
+            if stripped.endswith("{"):
+                level += 1
+        return "\n".join(indented_lines)
+    
     # -------------------------
     # Program
     # -------------------------
@@ -132,9 +150,14 @@ class CyamixToCVisitor(CyamixVisitor):
         for i in range(ctx.getChildCount() - 1):
             res = self.visit(ctx.getChild(i))
             if isinstance(res, str):
-                out.append(res)
+                out.append(res.strip())
+
         body = "".join(out)
-        text = "#include <stdio.h> \n\nvoid main() {\n" + body + "}\n"
+        if body.startswith("{") and body.endswith("}"):
+            body = body[1:-1].strip()
+
+        text = "#include <stdio.h> \n\nvoid main() {\n" + body + "\n}\n"
+        text = self.indent_code(text)
         self.code = text  
         return text
 
@@ -170,7 +193,7 @@ class CyamixToCVisitor(CyamixVisitor):
                 text += res
         text += "}\n"
         return text
-
+ 
     # -------------------------
     # If / Else
     # -------------------------
