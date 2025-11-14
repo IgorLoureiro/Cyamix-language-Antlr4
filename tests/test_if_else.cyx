@@ -1,10 +1,12 @@
 // Condition with blocks
 
-int age;
-age = 20;
+program() {
+    int age;
+    age = 20;
 
-if (age >= 18) {
-    printf("Adult");
-} else {
-   printf("Minor");
+    if (age >= 18) {
+        printf("Adult");
+    } else {
+    printf("Minor");
+    }
 }

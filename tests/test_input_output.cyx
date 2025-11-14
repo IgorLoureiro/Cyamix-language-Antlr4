@@ -1,26 +1,27 @@
 // Validating read and write operations (scanf, printf) with variables of different types.
 
+program() {
+    int age;
+    float height;
+    char initial;
+    boolean active;
 
-int age;
-float height;
-char initial;
-boolean active;
+    printf("Enter your age: ");
+    scanf("%d", &age);
 
-printf("Enter your age: ");
-scanf("%d", &age);
+    printf("Enter your height: ");
+    scanf("%f", &height);
 
-printf("Enter your height: ");
-scanf("%f", &height);
+    printf("Enter your initial: ");
+    scanf(" %c", &initial);
 
-printf("Enter your initial: ");
-scanf(" %c", &initial);
+    printf("Are you active? (1 for yes, 0 for no): ");
+    scanf("%d", &active);
 
-printf("Are you active? (1 for yes, 0 for no): ");
-scanf("%d", &active);
+    printf("\nData Summary:\n");
 
-printf("\nData Summary:\n");
-
-printf("Age: %d\n", age);
-printf("Height: %.2f\n", height);
-printf("Initial: %c\n", initial);
-printf("Active: %d\n", active);
+    printf("Age: %d\n", age);
+    printf("Height: %.2f\n", height);
+    printf("Initial: %c\n", initial);
+    printf("Active: %d\n", active);
+}

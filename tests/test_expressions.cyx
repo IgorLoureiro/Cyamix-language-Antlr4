@@ -1,15 +1,17 @@
 // Test of precedence of mathematical and logical operations.
 
-int a;
-int b;
-float result;
-boolean test;
+program() {
+    int a;
+    int b;
+    float result;
+    boolean test;
 
-a = 10;
-b = 3;
+    a = 10;
+    b = 3;
 
-result = (a + b) * 2 - (b / a);
-test = (a > b) && (result != 0);
+    result = (a + b) * 2 - (a / b);
+    test = (a > b) && (result != 0);
 
-printf("Result: %.2f\n", result);
-printf("Test: %d\n", test);
+    printf("Result: %.2f\n", result);
+    printf("Test: %d\n", test);
+}
