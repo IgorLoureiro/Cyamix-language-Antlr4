@@ -1,8 +1,7 @@
-// Condition with blocks
+// Test Condition with blocks
 
 program() {
-    int age;
-    age = 20;
+    int age = 20;
 
     if (age >= 18) {
         printf("Adult");

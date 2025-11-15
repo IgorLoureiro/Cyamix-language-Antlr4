@@ -68,19 +68,22 @@ class SemanticAnalyzer(CyamixVisitor):
         
     def visitVarDecl(self, ctx: CyamixParser.VarDeclContext):
         """Handles variable declaration (type checking and symbol table entry)."""
-        var_name = ctx.ID().getText()
         var_type = self.visit(ctx.type_())
 
-        if var_name in self.symbols:
-            self.report_error(ctx.ID().symbol.line, ctx.ID().symbol.column, f"Variable '{var_name}' already declared.")
-        else:
-            self.symbols[var_name] = var_type
+        items = ctx.varItem()
+        for item in items:
+            var_name = item.ID().getText()
 
-        if ctx.expr():
-            expr_type = self.visit(ctx.expr()) 
-            if expr_type != 'error_type' and expr_type != var_type:
-                self.report_error(ctx.start.line, ctx.start.column, f"Type mismatch: cannot assign '{expr_type}' to variable '{var_name}' of type '{var_type}'.")
-        
+            if var_name in self.symbols:
+                self.report_error(item.ID().symbol.line, item.ID().symbol.column, f"Variable '{var_name}' already declared.")
+            else:
+                self.symbols[var_name] = var_type
+
+            if item.expr():
+                expr_type = self.visit(item.expr()) 
+                if expr_type != 'error_type' and expr_type != var_type:
+                    self.report_error(ctx.start.line, ctx.start.column, f"Type mismatch: cannot assign '{expr_type}' to variable '{var_name}' of type '{var_type}'.")
+            
     def visitAssignment(self, ctx: CyamixParser.AssignmentContext):
         """Handles simple assignment (x = expr;)."""
         var_name = ctx.ID().getText()
@@ -201,7 +204,7 @@ class SemanticAnalyzer(CyamixVisitor):
         if ctx.BOOL_LITERAL():
             return 'boolean'
         if ctx.STRING_LITERAL():
-            return 'string'
+            return 'text'
         
         if ctx.ID():
             var_name = ctx.ID().getText()

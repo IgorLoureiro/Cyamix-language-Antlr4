@@ -12,21 +12,29 @@ class CyamixToCVisitor(CyamixVisitor):
     # -------------------------
     def visitVarDecl(self, ctx):
         type_name = ctx.type_().getText()
-        name = ctx.ID().getText()
 
         c_type = {
             "int": "int",
             "float": "float",
             "char": "char",
-            "boolean": "int"  # boolean -> int
+            "boolean": "int", 
+            "text": "char"  
         }.get(type_name, type_name)
 
-        value = ""
-        if ctx.expr():
-            expr_value = self.visit(ctx.expr())
-            value = f" = {expr_value}" if expr_value else ""
+        line = ""
+        for item in ctx.varItem():
+            name = item.ID().getText()
 
-        line = f"{c_type} {name}{value};\n"
+            value = ""
+            if item.expr():
+                expr_value = self.visit(item.expr())
+                value = f" = {expr_value}" if expr_value else ""
+
+            if type_name == "text":
+                line += f"{c_type} {name}[]{value};\n"
+            else:
+                line += f"{c_type} {name}{value};\n"
+
         return line
 
     # -------------------------
@@ -168,8 +176,6 @@ class CyamixToCVisitor(CyamixVisitor):
         
         if ctx.varDecl():
             return self.visit(ctx.varDecl())
-        if ctx.statement():
-            return self.visit(ctx.statement())
         return ""
 
     # -------------------------
@@ -264,17 +270,31 @@ class CyamixToCVisitor(CyamixVisitor):
     # -------------------------
     def visitVarDeclNoSemi(self, ctx):
         type_name = ctx.type_().getText()
-        name = ctx.ID().getText()
+
         c_type = {
             "int": "int",
             "float": "float",
             "char": "char",
-            "boolean": "int"
+            "boolean": "int",
+            "text": "char"
         }.get(type_name, type_name)
-        init = ""
-        if ctx.expr():
-            init = f" = {self.visit(ctx.expr())}"
-        return f"{c_type} {name}{init}"
+
+        parts = []
+
+        for item in ctx.varItem():
+            name = item.ID().getText()
+
+            init = ""
+            if item.expr():
+                init = f" = {self.visit(item.expr())}"
+
+            if type_name == "text" and init:
+                parts.append(f"{name}[]{init}")
+            else:
+                parts.append(f"{name}{init}")
+
+        return f"{c_type} " + ", ".join(parts)
+
 
     # -------------------------
     # Relational Expressions

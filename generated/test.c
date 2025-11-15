@@ -1,12 +1,18 @@
-#include <stdio.h> 
+#include <stdio.h>
 
 void main() {
-int x = 5;
-float y = 3.14;
-if (x > 3) {
-printf("ok\n");
-}
-else {
-printf("fail\n");
-}
+    int a;
+    int b = 1;
+    int c = 3;
+    printf("Number B == %d && Number C == %d \n", b, c);
+    char fullname[] = "John Doe";
+    printf("name: %s\n", fullname);
+    int age = 20;
+    printf("age: %d\n", age);
+    if (c > 1) {
+        printf("ok\n");
+    }
+    else {
+        printf("fail\n");
+    }
 }

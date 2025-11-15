@@ -36,7 +36,7 @@ pip install -r requirements.txt
 Whenever you modify the **`Cyamix.g4`** grammar file, you need to regenerate the ANTLR artifacts:
 
 ```bash
-java -jar C:\antlr\antlr-4.13.2-complete.jar -Dlanguage=Python3 -visitor -listener Cyamix.g4
+antlr4 -Dlanguage=Python3 -visitor -listener Cyamix.g4
 ```
 
 📁 This will generate (or update) the following files:

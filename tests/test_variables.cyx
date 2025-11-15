@@ -1,18 +1,23 @@
-//Valid declarations and assignments with different types
+// Test Valid declarations and assignments with different types
 
 program() {
     int age;
     float height;
-    char initial;
+    char genre;
     boolean active;
 
+    text name = "John Doe";
     age = 25;
     height = 1.72;
-    initial = 'G';
+    genre = 'M';
     active = 1 != 1;
 
+    // Test with multi declaration of variables
+    int a, b = 1, c = 2;
+
+    printf("Name: %s\n", name);
     printf("Age: %d\n", age);
     printf("Height: %.2f\n", height);
-    printf("Initial: %c\n", initial);
+    printf("Genre: %c\n", genre);
     printf("Active: %d\n", active);
 }
