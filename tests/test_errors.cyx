@@ -1,3 +1,5 @@
+// Test for some validation errors
+
 program() {
     int x = ;  // Error: the value of x
 

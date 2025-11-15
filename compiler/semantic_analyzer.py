@@ -204,7 +204,7 @@ class SemanticAnalyzer(CyamixVisitor):
         if ctx.BOOL_LITERAL():
             return 'boolean'
         if ctx.STRING_LITERAL():
-            return 'string'
+            return 'text'
         
         if ctx.ID():
             var_name = ctx.ID().getText()

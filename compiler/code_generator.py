@@ -17,7 +17,8 @@ class CyamixToCVisitor(CyamixVisitor):
             "int": "int",
             "float": "float",
             "char": "char",
-            "boolean": "int"  # boolean -> int
+            "boolean": "int", 
+            "text": "char"  
         }.get(type_name, type_name)
 
         line = ""
@@ -29,7 +30,10 @@ class CyamixToCVisitor(CyamixVisitor):
                 expr_value = self.visit(item.expr())
                 value = f" = {expr_value}" if expr_value else ""
 
-            line += f"{c_type} {name}{value};\n"
+            if type_name == "text":
+                line += f"{c_type} {name}[]{value};\n"
+            else:
+                line += f"{c_type} {name}{value};\n"
 
         return line
 
@@ -271,7 +275,8 @@ class CyamixToCVisitor(CyamixVisitor):
             "int": "int",
             "float": "float",
             "char": "char",
-            "boolean": "int"  
+            "boolean": "int",
+            "text": "char"
         }.get(type_name, type_name)
 
         parts = []
@@ -283,7 +288,10 @@ class CyamixToCVisitor(CyamixVisitor):
             if item.expr():
                 init = f" = {self.visit(item.expr())}"
 
-            parts.append(f"{name}{init}")
+            if type_name == "text" and init:
+                parts.append(f"{name}[]{init}")
+            else:
+                parts.append(f"{name}{init}")
 
         return f"{c_type} " + ", ".join(parts)
 
