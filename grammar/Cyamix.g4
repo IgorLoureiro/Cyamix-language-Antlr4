@@ -24,9 +24,14 @@ topDecl
     : varDecl
     ;
 
-/* VARIABLE DECLARATION: type ID ( = expr )? ; */
+/* MULTI VARIABLE DECLARATION: type ID ( = expr )? ; */
 varDecl
-    : type ID ( '=' expr )? ';'
+    : type varItem (',' varItem)* ';'
+    ;
+
+/* VARIABLE DECLARATION: ID ( = expr )? ; */
+varItem
+    : ID ( '=' expr )?
     ;
 
 /* STATEMENTS */
@@ -87,7 +92,7 @@ assignmentNoSemi
 
 /* VARIABLE DECLARATION inside for init (no semicolon) */
 varDeclNoSemi
-    : type ID ( '=' expr )?
+    : type varItem (',' varItem)*
     ;
 
 /* FUNCTION CALL (printf/scanf or user) */

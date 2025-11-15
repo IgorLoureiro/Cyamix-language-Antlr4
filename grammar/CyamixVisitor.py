@@ -24,6 +24,11 @@ class CyamixVisitor(ParseTreeVisitor):
         return self.visitChildren(ctx)
 
 
+    # Visit a parse tree produced by CyamixParser#varItem.
+    def visitVarItem(self, ctx:CyamixParser.VarItemContext):
+        return self.visitChildren(ctx)
+
+
     # Visit a parse tree produced by CyamixParser#statement.
     def visitStatement(self, ctx:CyamixParser.StatementContext):
         return self.visitChildren(ctx)
