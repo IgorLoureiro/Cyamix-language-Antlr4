@@ -24,9 +24,14 @@ topDecl
     : varDecl
     ;
 
-/* VARIABLE DECLARATION: type ID ( = expr )? ; */
+/* MULTI VARIABLE DECLARATION: type ID ( = expr )? ; */
 varDecl
-    : type ID ( '=' expr )? ';'
+    : type varItem (',' varItem)* ';'
+    ;
+
+/* VARIABLE DECLARATION: ID ( = expr )? ; */
+varItem
+    : ID ( '=' expr )?
     ;
 
 /* STATEMENTS */
@@ -87,7 +92,7 @@ assignmentNoSemi
 
 /* VARIABLE DECLARATION inside for init (no semicolon) */
 varDeclNoSemi
-    : type ID ( '=' expr )?
+    : type varItem (',' varItem)*
     ;
 
 /* FUNCTION CALL (printf/scanf or user) */
@@ -163,6 +168,7 @@ type
     | 'float'
     | 'char'
     | 'boolean'
+    | 'text'
     ;
 
 /* --------------------
@@ -171,9 +177,6 @@ type
 
 /* Reserverd words */
 PROGRAM : 'program';
-
-/* Identifiers but reserve keywords via parser rules */
-ID : [a-zA-Z_] [a-zA-Z_0-9]* ;
 
 /* Literals */
 INT_LITERAL
@@ -194,6 +197,9 @@ CHAR_LITERAL
 BOOL_LITERAL
     : 'true' | 'false'
     ;
+
+/* Identifiers but reserve keywords via parser rules */
+ID : [a-zA-Z_] [a-zA-Z_0-9]* ;
 
 /* Strings: double quoted with escapes */
 STRING_LITERAL
