@@ -1,4 +1,4 @@
-// Simple repetition structure
+// Test Simple repetition structure
 
 program() {
     int counter;

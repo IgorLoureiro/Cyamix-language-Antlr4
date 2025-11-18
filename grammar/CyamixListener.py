@@ -35,6 +35,15 @@ class CyamixListener(ParseTreeListener):
         pass
 
 
+    # Enter a parse tree produced by CyamixParser#varItem.
+    def enterVarItem(self, ctx:CyamixParser.VarItemContext):
+        pass
+
+    # Exit a parse tree produced by CyamixParser#varItem.
+    def exitVarItem(self, ctx:CyamixParser.VarItemContext):
+        pass
+
+
     # Enter a parse tree produced by CyamixParser#statement.
     def enterStatement(self, ctx:CyamixParser.StatementContext):
         pass

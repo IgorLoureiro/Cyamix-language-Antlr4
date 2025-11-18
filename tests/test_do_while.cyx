@@ -1,8 +1,7 @@
 // Post-condition repetition
 
 program() {
-    int i;
-    i = 0;
+    int i = 0;
 
     do {
         printf("i: %d\n", i);
